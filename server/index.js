@@ -14,12 +14,7 @@ app.listen(8800, () => {
 });
 
 //creating a connection to the database
-const db = mysql2.createConnection({
-  host: 'localhost',
-  user: 'root',
-  password: '12345678',
-  database: 'cesae_db',
-});
+const db = mysql2.createConnection("mysql://root:JwTNduIeTbmOKiUujfMnBKhEkXWSybfO@viaduct.proxy.rlwy.net:41706/railway");
 
 // using express to parse the data
 app.use(express.json());
@@ -43,7 +38,7 @@ app.get('/form', (req, res) => {
 // create a record
 app.post('/form', (req, res) => {
   const q =
-    'INSERT INTO formulario (name, gender, birthDate, education, nif, email, address, phone, terms) VALUES(?)';
+    'INSERT INTO formulario (name, gender, birthDate, education, nif, email, address, phone, terms) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)';
   const values = [
     req.body.name,
     req.body.gender,
@@ -55,11 +50,12 @@ app.post('/form', (req, res) => {
     req.body.phone,
     req.body.terms,
   ];
-  db.query(q, [values], (err, data) => {
+  db.query(q, values, (err, data) => {
     if (err) return res.json(err);
     return res.json('Formulário submetido com sucesso!');
   });
 });
+
 
 // delete a record
 app.delete('/form/:id', (req, res) => {
